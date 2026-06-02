@@ -264,8 +264,34 @@
     <p>El tablero se llama <strong>El Nexo</strong>. Es una cuadrícula de <strong>12 × 12</strong> dibujada sobre cartón rígido (por ejemplo, una caja de pizza). Cada casilla mide <strong>3.3 cm</strong>, lo que da espacio cómodo para las fichas.</p>
     <p>En las cuatro esquinas están las <strong>Bases</strong> (zonas de 2×2 casillas), una para cada jugador. El objetivo es conectar tu base con la del oponente cruzando el tablero.</p>
 
+    <div class="intro-box">
+      <strong>Simulación Animada Rápida:</strong> Observa en el tablero abajo cómo el Jugador 1 (rojo) construye una ruta lógica de proposiciones (<strong>p ∧ q</strong>) conectando fichas casillero por casillero hasta alcanzar la Zona de Poder (ZP) más cercana.
+    </div>
+
     <div class="board-container">
       <svg width="400" height="400" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="font-family:'Patrick Hand',cursive;">
+        <style>
+          .sim-tile { opacity: 0; animation: appear 6s infinite; }
+          .sim-t1 { animation-delay: 1s; }
+          .sim-t2 { animation-delay: 2.5s; }
+          .sim-t3 { animation-delay: 4s; }
+          .sim-t4 { animation-delay: 5.5s; }
+          .sim-edge { stroke-dasharray: 20; stroke-dashoffset: 20; animation: drawLine 6s infinite; stroke:#1a1a2e; stroke-width:3; stroke-linecap:round; }
+          .sim-e1 { animation-delay: 2.5s; }
+          .sim-e2 { animation-delay: 4s; }
+          .sim-e3 { animation-delay: 5.5s; }
+          
+          @keyframes appear {
+            0%, 5% { opacity: 0; transform: scale(0.5); }
+            10%, 90% { opacity: 1; transform: scale(1); }
+            95%, 100% { opacity: 0; }
+          }
+          @keyframes drawLine {
+            0%, 5% { stroke-dashoffset: 20; }
+            10%, 90% { stroke-dashoffset: 0; }
+            95%, 100% { opacity:0; }
+          }
+        </style>
         <rect width="420" height="420" fill="#fdf6e3" rx="4"/>
         <g stroke="#c8b89a" stroke-width="1">
           <line x1="30" y1="30" x2="390" y2="30"/><line x1="30" y1="60" x2="390" y2="60"/>
@@ -292,18 +318,54 @@
         <text x="60" y="366" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e7d32">J3</text>
         <rect x="330" y="330" width="60" height="60" fill="#e8d5ff" opacity=".7"/>
         <text x="360" y="366" text-anchor="middle" font-size="13" font-weight="bold" fill="#6a1b9a">J4</text>
+        
+        <!-- Zonas de Poder -->
         <circle cx="150" cy="150" r="22" fill="#fff9c4" stroke="#f9a825" stroke-width="1.5" stroke-dasharray="4,2"/>
         <text x="150" y="155" text-anchor="middle" font-size="11" fill="#7b5e00">★ ZP</text>
         <circle cx="255" cy="210" r="22" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5" stroke-dasharray="4,2"/>
         <text x="255" y="215" text-anchor="middle" font-size="11" fill="#1b5e20">★ ZP</text>
         <circle cx="195" cy="300" r="22" fill="#fce4ec" stroke="#c2185b" stroke-width="1.5" stroke-dasharray="4,2"/>
         <text x="195" y="305" text-anchor="middle" font-size="11" fill="#880e4f">★ ZP</text>
+        
+        <!-- ================= ANIMACION ================= -->
+        <!-- Enlaces -->
+        <line x1="75" y1="75" x2="100" y2="75" class="sim-edge sim-e2"/>
+        <line x1="105" y1="75" x2="135" y2="75" class="sim-edge sim-e2"/>
+        <line x1="135" y1="75" x2="135" y2="100" class="sim-edge sim-e3"/>
+        <line x1="135" y1="105" x2="135" y2="135" class="sim-edge sim-e3"/>
+        
+        <!-- Fichas -->
+        <!-- T1: P (conectando desde la base J1 hacia la derecha) -->
+        <g class="sim-tile sim-t1" style="transform-origin: 105px 75px;">
+          <circle cx="105" cy="75" r="12" fill="#ffd5d5" stroke="#c62828" stroke-width="2"/>
+          <text x="105" y="79" text-anchor="middle" font-size="12" fill="#6b1010" font-weight="bold">p</text>
+        </g>
+        
+        <!-- T2: AND -->
+        <g class="sim-tile sim-t2" style="transform-origin: 135px 75px;">
+          <circle cx="135" cy="75" r="12" fill="#ffe0b2" stroke="#e65100" stroke-width="2"/>
+          <text x="135" y="80" text-anchor="middle" font-size="14" fill="#5d2000" font-weight="bold">∧</text>
+        </g>
+
+        <!-- T3: Q (hacia abajo apuntando a la ZP) -->
+        <g class="sim-tile sim-t3" style="transform-origin: 135px 105px;">
+          <circle cx="135" cy="105" r="12" fill="#cce5ff" stroke="#1565c0" stroke-width="2"/>
+          <text x="135" y="109" text-anchor="middle" font-size="12" fill="#0a3d6b" font-weight="bold">q</text>
+        </g>
+        
+        <!-- T4: Estrella / Conexión exitosa a la ZP! -->
+        <g class="sim-tile sim-t4" style="transform-origin: 140px 130px;">
+          <circle cx="140" cy="130" r="10" fill="#fffacd" stroke="#f9a825" stroke-width="2"/>
+          <text x="140" y="134" text-anchor="middle" font-size="12" fill="#7b5e00" font-weight="bold">★</text>
+        </g>
+        <!-- ============================================= -->
+
         <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c0392b"/></marker></defs>
         <line x1="30" y1="15" x2="390" y2="15" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
         <text x="210" y="11" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="bold">12 × 3.3 cm = 39.6 cm</text>
         <text x="210" y="412" text-anchor="middle" font-size="11" fill="#666">★ ZP = Zona de Poder fija</text>
       </svg>
-      <div class="board-label">Fig. 1 — El Nexo: tablero 12×12 con Bases y Zonas de Poder</div>
+      <div class="board-label">Fig. 1 — El Nexo: Animación de trazado de ruta lógica</div>
     </div>
 
     <div class="sticky r2"><strong>Cambio v2.0:</strong> Las Zonas de Poder ya están definidas desde el inicio de la partida. Así ninguna jugada cambia la ubicación de esas casillas.</div>
